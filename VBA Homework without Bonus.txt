@@ -1,0 +1,100 @@
+Sub VBAchallengept1()
+For Each ws In Worksheets
+Dim WorksheetName As String
+WorksheetName = ws.Name
+  
+ws.Range("I1").EntireColumn.Insert
+
+ws.Cells(1, 9).Value = "Ticker"
+       
+ws.Range("J1").EntireColumn.Insert
+
+ws.Cells(1, 10).Value = "Yearly Change"
+ 
+ws.Range("K1").EntireColumn.Insert
+
+ws.Cells(1, 11).Value = "Percent Change"
+ws.Range("L1").EntireColumn.Insert
+
+ws.Cells(1, 12).Value = "Total Stock Volume"
+
+
+ Dim Ticker_name As String
+
+  Dim stock_volume As Double
+  stock_volume = 0
+  Dim Open_price As Double
+  Open_price = 0
+
+  Dim close_price As Double
+ close_price = 0
+ Dim yearly_change As Double
+  Dim Summary_Table_Row As Integer
+  Summary_Table_Row = 2
+Dim percent_change As Double
+
+  
+  For i = 2 To 759001
+ 
+ If ws.Cells(i, 2).Value = ws.Cells(2, 2).Value Then
+ Open_price = ws.Cells(i, 3).Value
+ 
+ stock_volume = ws.Cells(i, 7).Value
+    
+   ElseIf ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+  
+ Ticker_name = ws.Cells(i, 1).Value
+
+stock_volume = stock_volume + ws.Cells(i, 7).Value
+
+close_price = ws.Cells(i, 6).Value
+      
+      yearly_change = (close_price - Open_price)
+      
+    percent_change = (yearly_change / Open_price)
+    
+       
+      ws.Range("I" & Summary_Table_Row).Value = Ticker_name
+
+      ws.Range("J" & Summary_Table_Row).Value = yearly_change
+      
+      ws.Range("K" & Summary_Table_Row).Value = percent_change
+      
+      ws.Range("L" & Summary_Table_Row).Value = stock_volume
+
+      
+      Summary_Table_Row = Summary_Table_Row + 1
+      
+      stock_volume = 0
+
+    
+    Else
+
+      
+   stock_volume = stock_volume + ws.Cells(i, 7).Value
+   End If
+
+  Next i
+  
+Next ws
+
+For Each ws In Worksheets
+
+
+  For i = 2 To 759001
+  ws.Cells(i, 11).NumberFormat = "0.00%"
+    
+    If ws.Cells(i, 10) > 0 Then
+        
+        ws.Cells(i, 10).Interior.ColorIndex = 4
+    Else
+        ws.Cells(i, 10).Interior.ColorIndex = 3
+    End If
+
+Next i
+
+ Next ws
+ 
+
+End Sub
+    
